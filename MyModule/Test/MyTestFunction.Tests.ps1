@@ -1,16 +1,29 @@
 $ModuleName = 'MyModule'
 if (!(Get-Module $ModuleName))
 {
-    Import-Module $(Join-Path $(Split-Path $MyInvocation.MyCommand.Definition -Parent) '..\MyModule.psd1') -Force -DisableNameChecking
+    $ModulePath = $(Join-Path $(Split-path (Split-Path $MyInvocation.MyCommand.Definition -Parent) -Parent) "$($ModuleName).psd1")
+    Write-Host $ModulePath
+    Import-Module $ModulePath -Force -DisableNameChecking
 }
+if (Get-Module 'MyModule') {Write-Host 'Module Imported successfully!'}
 
-Describe 'MyTestFunction' {
-    Context 'When the imput parameter is $null' {
-        Mock Log-Debug
-        Mock Log-Info
-        Mock Out-DebugVariable
+Describe 'Get-Lolz' {
+    Context "When the imput parameter is ' ' (Working)" {
+        Mock Get-Lolz { '95834512077' }
 
-        $result = MyTestFunction $null
+        $result = Get-Lolz ' '
+
+        it "returns string of numbers" {
+            $result | Should -Match '\d+'
+        }
+    }
+
+    Context "When the imput parameter is ' ' (Failing)" {
+        Mock Log-Debug -ModuleName 'MyModule'
+        Mock Log-Info -ModuleName 'MyModule'
+        Mock Out-DebugVariable -ModuleName 'MyModule'
+
+        $result = Get-Lolz ' '
 
         it "returns string of numbers" {
             $result | Should -Match '\d+'
