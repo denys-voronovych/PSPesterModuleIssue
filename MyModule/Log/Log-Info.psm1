@@ -1,4 +1,4 @@
-function Log-Debug
+function Log-Info
 {
     [CmdletBinding()]
     param(

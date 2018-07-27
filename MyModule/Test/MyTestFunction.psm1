@@ -18,9 +18,9 @@ function Get-Lolz
         try
         {
             $Output = ''
-            for ($i=0,$i-lt100;$i++)
+            for ([int]$i=0;$i-lt100;$i++)
             {
-                $Output += [String](Get-Random -Maximum 9)
+                $Output = $Output, [String](Get-Random -Maximum 9) -join ''
             }
             Log-Debug $Output
 
